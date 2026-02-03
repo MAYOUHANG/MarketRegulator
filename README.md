@@ -1,4 +1,4 @@
-# MarketRegulator (动态经济监管者)
+# MarketRegulator (动态经济市场)
 
 ![Java 17](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)
 
