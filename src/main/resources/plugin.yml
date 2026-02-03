@@ -1,0 +1,9 @@
+name: MarketRegulator
+version: 1.0
+main: com.example.marketregulator.MarketRegulator
+api-version: 1.20
+depend: [Vault]
+commands:
+  mr:
+    description: Open the market or administer items.
+    usage: /mr open | /mr admin add <material> <basePrice> <targetStock>
