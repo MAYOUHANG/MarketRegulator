@@ -1,22 +1,62 @@
-# MarketRegulator (动态经济市场插件)
+# MarketRegulator (动态经济监管者)
 
-## 简介
-MarketRegulator 是一款基于供需机制的动态经济市场插件。物品价格会随着库存与目标库存的差异自动浮动，从而模拟真实的供需变化，帮助服务器维持健康、稳定的经济环境。
+![Java 17](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)
 
-## 功能特色
-- 📈 **动态定价**：价格随库存变化自动调整，体现供需关系。
-- 💾 **SQLite 持久化**：市场数据保存在本地数据库，重启不丢失。
-- 🖥️ **图形化界面**：通过 GUI 直观查看价格与库存并进行交易。
-- 🔌 **Vault 兼容**：与主流经济插件无缝对接。
+## 📖 简介
+MarketRegulator 是一款面向生产环境的动态经济市场插件，用于在服务器内构建“会自我调节”的经济体系。它通过监控商品库存与目标库存的差异，自动调整价格，从而模拟真实市场中的供需关系。
 
-## 指令
-- `/mr open`：打开市场 GUI。
-- `/mr admin add <material> <basePrice> <targetStock>`：添加市场物品（仅管理员）。
+插件内置数学模型来抑制极端通货膨胀或通货紧缩，使经济系统在波动中保持可控的稳定性。
 
-## 安装步骤
-1. 安装依赖：**Vault** + 任意经济插件（例如 **EssentialsX**）。
-2. 将插件 jar 放入服务器的 `/plugins` 目录。
-3. 重启服务器即可生效。
+## 🔢 核心算法 (Pricing Algorithm)
+管理员无需编写代码即可理解和配置核心价格模型：
 
-## 配置说明
-编辑 `config.yml` 可自定义提示信息与文本内容，用于本地化或调整提示风格。
+```
+Current Price = Base Price * (Target Stock / Current Stock) ^ Volatility
+```
+
+- **Base Price**：基础价格，决定商品的“基准价值”。
+- **Target Stock**：目标库存，代表系统希望维持的理想库存量。
+- **Current Stock**：当前库存，实际市场库存。
+- **Volatility（波动率）**：控制价格波动的灵敏度。
+  - **高波动率**：价格变化更剧烈，供需偏差会带来更大涨跌。
+  - **低波动率**：价格变化更平缓，适合追求稳定的经济环境。
+
+## 🛠 命令与权限 (Commands & Permissions)
+| Command | Permission Node | Description | Default |
+| --- | --- | --- | --- |
+| `/mr open` | `marketregulator.use` | 打开市场界面 | 玩家 (True) |
+| `/mr admin add` | `marketregulator.admin` | 添加商品到市场 | OP Only |
+| `/mr admin reload` | `marketregulator.admin` | 重载配置文件 | OP Only |
+
+## ⚙️ 配置文件 (Configuration)
+以下示例展示了常见的 `config.yml` 结构，你可以在此基础上进行定制化调整：
+
+```yaml
+messages:
+  prefix: "&6[MarketRegulator]&r"
+  no-permission: "&c你没有权限执行此命令。"
+  market-opened: "&a市场界面已打开。"
+  item-added: "&a已添加商品：%item%"
+
+pricing:
+  default-volatility: 1.2
+  min-price: 0.1
+
+ui:
+  title: "&b动态经济市场"
+```
+
+**配置说明：**
+- `messages`: 自定义所有提示信息，支持色彩代码（`&` 格式）。例如 `&a` 表示绿色，`&c` 表示红色。
+- `pricing.default-volatility`: 全局默认波动率，未单独设置时使用此值。
+- `pricing.min-price`: 价格下限，避免价格低到无意义或被恶意套利。
+- `ui.title`: GUI 标题，可根据服务器风格进行修改。
+
+## 📦 安装与前置 (Installation)
+1. **服务器版本**：Spigot 1.20+。
+2. **依赖插件**：Vault。
+3. **经济插件**：EssentialsX / CMI（或任意支持 Vault 的经济插件）。
+4. 将插件 jar 放入 `/plugins` 目录后重启服务器。
+
+## 🤝 Contribution
+本项目为开源项目，欢迎提交 Issue、Pull Request 或建议来改进功能与文档。
